@@ -4,6 +4,7 @@ import unicodedata
 
 os.system('cls')
 
+
 print('===============================================')
 print('        SEJA BEM-VINDO AO JOGO DA FORCA')
 print('===============================================\n')
@@ -11,8 +12,9 @@ print('===============================================\n')
 
 regras = [' 1. Digite apenas uma letra por vez.', 
           ' 2. Só é apenas aceito letras como tentativa.',
-          ' 3. A cada tentativa errada, uma parte do boneco é acrescentada a forca.\n',
-          '(Caso forme o corpo completo, o jogador perde.)',
+          ' 3. Não é aceito letras repetidas.',
+          ' 4. A cada tentativa errada, uma parte do boneco é acrescentada a forca,\
+          \n(Caso forme o corpo completo, o jogador perde.)',
         ]
 
 lista_palavras = ['python',
@@ -22,7 +24,6 @@ lista_palavras = ['python',
                     'trabalho'
                 ]
 
-
 letra_correta = ''
 n_letras_secretas = ''
 palavra_da_vez = random.choice(lista_palavras)
@@ -30,18 +31,44 @@ n_tentativas = 0
 n_tentativas_erradas = 0
 saidaOUentrada = 0
 
-print(f'Regras do jogo: ')
-for regra in range(3):
-    print(regras[regra])
+# -----------------------------------------------------------------------------
+
+def MostrarRegras():
+    print(f'Regras do jogo: ')
+    for regra in regras:
+        print(regra)
+
+def FormatoDaPalavraEscondida():
+    n_letras_secretas = ''
+
+    for _ in palavra_da_vez:
+        if _ not in n_letras_secretas:
+            n_letras_secretas += '_'
+
+    print(f'\nPalavra secreta: {n_letras_secretas}')
 
 
-for _ in palavra_da_vez:
-    if _ not in n_letras_secretas:
-        n_letras_secretas += '_'
+def continuarOuPararJogo():
+    saidaOUentrada = 0
 
-print(f'\nPalavra secreta: {n_letras_secretas}')
+    while True:
+        pergunta_de_saida = input('Deseja continuar jogando (Sim/Não)? ').lower()
+        if pergunta_de_saida == 'não':
+            print('Você saiu!!!')
+            return 0
+        elif pergunta_de_saida == 'sim':
+            print('Carregando Novamente o Jogo...')
+            return 1
+        else:
+            print('Resposta inválida!!! Tente novamente!!!')
+            continue
+    
 
 # -----------------------------------------------------------------------------
+
+MostrarRegras()
+
+FormatoDaPalavraEscondida()
 
 while True:
 
@@ -64,7 +91,10 @@ while True:
         f"{regras[1]}\n"
         "Tente novamente!\n")
         continue
-   
+
+    elif letra_digitada in letra_correta:
+        print('Essa letra ja foi jogada!\
+              \nTente outra letra!')
 
 # Processamento da jogada
 
@@ -95,21 +125,9 @@ while True:
 
 # Saída ou continuação do jogo
         
-        while True:
-            pergunta_de_saida = input('Deseja continuar jogando (Sim/Não)? ').lower()
-            if pergunta_de_saida == 'sim':
-                print('Você saiu!!!')
-                saidaOUentrada = 0
-                break
-            elif pergunta_de_saida == 'não':
-                print('Carregando Novamente o Jogo...')
-                saidaOUentrada = 1
-                break
-            else:
-                print('Resposta inválida!!! Tente novamente!!!')
-                continue
+        saidaOUentrada = continuarOuPararJogo()
 
-    if saidaOUentrada == 1:
-        continue
-    elif saidaOUentrada == 0:
-        break
+        if saidaOUentrada == 1:
+            continue
+        elif saidaOUentrada == 0:
+            break
