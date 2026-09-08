@@ -7,10 +7,15 @@ o jogador perde.
 
 ---
 
-**Até o momento**, a lógca ja foi implementada, porém, algumas **condições** e **funcionalidades** ainda faltam ser implementadas:
- - Caso a palavra secreta conter uma letra com acento, se o usuário digitar a letra correspondente (mesmo sem o acento),
-deve-se contar como um acerto e mostrar na mesma posição da palavra original e com o acento;
+**Até o momento**, O jogo esta numa fase onde funciona em ótimno estado, cumprindo todos os requisitos que um jogo da forca precisa para funcionar.
+Agora pensando no código do programa, sinto que consegui desenvolvelo de forma satisfatória, cumprindo os requisitos que faltavam para ele funcionar ao meu gosto,
+um exemplo de algo que faltava e consegui implementar foi a funcionalidade de adicionar palavras com acentos, antes dava problema pois se o usuário digitasse a letra "a", na resposta não seria mostrado o "ã".
 
- - Deve limitar o jogador até 4 tentativas erradas, após isso, mostra ao jogador que ele perdeu;
+Além disso, reorganizei o código definindo funções, deixando o programa mais fácil de se atualizar futuramente, que inclusive é algo que pretendo fazer.
 
- - Informar ao jogador quais partes do corpo do boneco já foram colocadas na forca.
+---
+
+### Atualizações Futuras
+Futuramente, pretendo fazer algumas adições ao código: 
+- Adicionar uma função onde o usúario pode escolher jogar em inglês, mudando a linguagem do jogo e as palavras a serem adivinhadas.
+- Pretendo expandir o jogo tornando ele em um site público para qualquer pessoa poder jogar, fazendo algo parecido com o jogo Termo, tendo uma palavra diferente a cada dia. 
