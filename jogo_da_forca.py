@@ -1,6 +1,7 @@
 import os
 import random
 import unicodedata
+import sqlite3
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -170,6 +171,64 @@ lista_palavras = [
 # -----------------------------------------------------------------------------
 #                      === Principais funções do Jogo ===
 # -----------------------------------------------------------------------------
+
+# (Função que cria a Tabela no Banco de Dados)
+def Criar_Banco_Dados():
+    conexao = sqlite3.connect('jogo_da_forca.db')
+    cursor = conexao.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS palavras (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        palavra TEXT NOT NULL,
+        idioma TEXT NOT NULL
+        )
+''')
+    
+    conexao.commit()
+    conexao.close()
+
+# (Função que insere valores na tabela de Banco de Dados)
+def Inserir_Dados_Tabela():
+    conexao = sqlite3.connect('jogo_da_forca.db')
+    cursor = conexao.cursor()
+
+    palavras_pt = [
+        'python',
+        'palavra',
+        'escolha',
+        'computador',
+        'trabalho',
+        'coração',
+        'árvore',
+        'programação',
+        'informação',
+        'função']
+    palavras_en = [
+        'python',
+        'word',
+        'choice',
+        'computer',
+        'work',
+        'heart',
+        'tree',
+        'programming',
+        'information',
+        'function'
+    ]
+
+    for palavra in palavras_pt:
+        cursor.execute(
+            'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
+            (palavra, 'pt')
+        )
+    for palavra in palavras_en:
+        cursor.execute(
+            'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
+            (palavra, 'en')
+        )
+    conexao.commit()
+    conexao.close()
 
 def Escolher_Idioma():
     while True:
@@ -441,3 +500,6 @@ def main():
 # -----------------------------------------------------------------------------
 
 main()
+
+Criar_Banco_Dados()
+Inserir_Dados_Tabela()
