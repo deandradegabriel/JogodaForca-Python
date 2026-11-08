@@ -55,7 +55,7 @@ mensagens = {
         [
             'Número de erros excedidos, o corpo na forca foi completado!\n'
             'VOCÊ PERDEU!!!',
-            'A palavra secreta era:'
+            'A palavra secreta era: '
 
         ],
 
@@ -154,25 +154,10 @@ mensagens = {
 }
 
 
-lista_palavras = [
-    'python',
-    'palavra',
-    'escolha',
-    'computador',
-    'trabalho',
-    'coração',
-    'árvore',
-    'programação',
-    'informação',
-    'função'
-]
-
-
 # -----------------------------------------------------------------------------
 #                      === Principais funções do Jogo ===
 # -----------------------------------------------------------------------------
 
-# (Função que cria a Tabela no Banco de Dados)
 def Criar_Banco_Dados():
     conexao = sqlite3.connect('jogo_da_forca.db')
     cursor = conexao.cursor()
@@ -188,7 +173,7 @@ def Criar_Banco_Dados():
     conexao.commit()
     conexao.close()
 
-# (Função que insere valores na tabela de Banco de Dados)
+
 def Inserir_Dados_Tabela():
     conexao = sqlite3.connect('jogo_da_forca.db')
     cursor = conexao.cursor()
@@ -229,6 +214,35 @@ def Inserir_Dados_Tabela():
         )
     conexao.commit()
     conexao.close()
+
+
+def Buscar_Palavra_em_DB(idioma):
+    conexao = sqlite3.connect('jogo_da_forca.db')
+    cursor = conexao.cursor()
+    
+    if idioma not in ('pt', 'en'):
+        conexao.close()
+        return None
+    
+    comando_sql = f'''
+        SELECT palavra 
+        FROM palavras
+        WHERE idioma = ?
+        ORDER BY RANDOM()
+        LIMIT 1
+    '''
+        
+    cursor.execute(comando_sql, (idioma, ))
+    
+    resultado = cursor.fetchone()
+
+    if resultado is None:
+        conexao.close()
+        return None
+
+    conexao.close()
+    return resultado[0]
+
 
 def Escolher_Idioma():
     while True:
@@ -385,7 +399,7 @@ def Jogar(idioma):
     Mensagem_Inicial(idioma)
     Mostrar_Regras(idioma)
 
-    palavra_da_vez = random.choice(lista_palavras)
+    palavra_da_vez = Buscar_Palavra_em_DB(idioma)
 
     letras_tentadas = []
     n_tentativas = 0
@@ -500,6 +514,3 @@ def main():
 # -----------------------------------------------------------------------------
 
 main()
-
-Criar_Banco_Dados()
-Inserir_Dados_Tabela()
