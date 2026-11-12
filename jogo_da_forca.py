@@ -154,6 +154,7 @@ mensagens = {
 }
 
 
+
 # -----------------------------------------------------------------------------
 #                      === Principais funções do Jogo ===
 # -----------------------------------------------------------------------------
@@ -202,16 +203,33 @@ def Inserir_Dados_Tabela():
         'function'
     ]
 
-    for palavra in palavras_pt:
-        cursor.execute(
-            'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
-            (palavra, 'pt')
-        )
-    for palavra in palavras_en:
-        cursor.execute(
-            'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
-            (palavra, 'en')
-        )
+    comando_sql = ('''
+        SELECT COUNT(*)
+        FROM palavras
+        WHERE idioma = ?;
+
+    ''')
+
+    cursor.execute(comando_sql, ('pt',))
+    quantidade = cursor.fetchone()[0]
+
+    if quantidade == 0:
+        for palavra in palavras_pt:
+            cursor.execute(
+                'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
+                (palavra, 'pt')
+            )
+
+    cursor.execute(comando_sql, ('en',))
+    quantidade = cursor.fetchone()[0]
+
+    if quantidade == 0:
+        for palavra in palavras_en:
+            cursor.execute(
+                'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
+                (palavra, 'en')
+            )
+    
     conexao.commit()
     conexao.close()
 
@@ -495,9 +513,12 @@ def main():
 
 # === Executa o jogo ===
 
+    Criar_Banco_Dados()
+    Inserir_Dados_Tabela()
+    
     idioma = Escolher_Idioma()
     os.system('cls' if os.name == 'nt' else 'clear')
-
+    
     while True:
         Jogar(idioma)
 
