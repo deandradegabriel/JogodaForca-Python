@@ -1,0 +1,14 @@
+# Banco de dados local
+jogo_da_forca.db
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+
+# Ambientes virtuais
+.venv/
+venv/
+
+# Arquivos de configuração de editores
+.vscode/
+.idea/
