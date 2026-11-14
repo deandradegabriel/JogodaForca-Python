@@ -1,5 +1,4 @@
 import os
-import random
 import unicodedata
 import sqlite3
 
@@ -511,10 +510,13 @@ def Jogar(idioma):
 
 def main():
 
-# === Executa o jogo ===
+# === Criar Banco de Dados ===
 
     Criar_Banco_Dados()
     Inserir_Dados_Tabela()
+
+
+# === Executa o jogo ===
     
     idioma = Escolher_Idioma()
     os.system('cls' if os.name == 'nt' else 'clear')
