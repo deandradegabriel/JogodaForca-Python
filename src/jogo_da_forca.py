@@ -1,6 +1,13 @@
 import os
 import unicodedata
 import sqlite3
+from pathlib import Path
+
+DIRETORIO_PROJETO = Path(__file__).resolve().parent.parent
+DIRETORIO_DADOS = DIRETORIO_PROJETO / 'data'
+
+DIRETORIO_DADOS.mkdir(exist_ok=True)
+CAMINHO_BANCO = DIRETORIO_DADOS / 'jogo_da_forca.db'
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -159,7 +166,7 @@ mensagens = {
 # -----------------------------------------------------------------------------
 
 def Criar_Banco_Dados():
-    conexao = sqlite3.connect('jogo_da_forca.db')
+    conexao = sqlite3.connect(CAMINHO_BANCO)
     cursor = conexao.cursor()
 
     cursor.execute('''
@@ -175,7 +182,7 @@ def Criar_Banco_Dados():
 
 
 def Inserir_Dados_Tabela():
-    conexao = sqlite3.connect('jogo_da_forca.db')
+    conexao = sqlite3.connect(CAMINHO_BANCO)
     cursor = conexao.cursor()
 
     palavras_pt = [
@@ -234,7 +241,7 @@ def Inserir_Dados_Tabela():
 
 
 def Buscar_Palavra_em_DB(idioma):
-    conexao = sqlite3.connect('jogo_da_forca.db')
+    conexao = sqlite3.connect(CAMINHO_BANCO)
     cursor = conexao.cursor()
     
     if idioma not in ('pt', 'en'):
