@@ -9,8 +9,6 @@ DIRETORIO_DADOS = DIRETORIO_PROJETO / 'data'
 DIRETORIO_DADOS.mkdir(exist_ok=True)
 CAMINHO_BANCO = DIRETORIO_DADOS / 'jogo_da_forca.db'
 
-os.system('cls' if os.name == 'nt' else 'clear')
-
 # === Dicionários Utilizados para guardar as palavras em Português e Inglês ===
  
 mensagens = {
@@ -131,7 +129,7 @@ mensagens = {
 
         'mensagens_perdeu' : 
         [
-            'Number of errors exceeded, the body in the gallows is complet!\n'
+            'Maximum number of errors exceeded,the gallows figure is complete!\n'
             'YOU LOST!!!',
             'The secret word was: '
         ],
@@ -175,7 +173,7 @@ def Criar_Banco_Dados():
         palavra TEXT NOT NULL,
         idioma TEXT NOT NULL
         )
-''')
+    ''')
     
     conexao.commit()
     conexao.close()
@@ -516,6 +514,7 @@ def Jogar(idioma):
 # -----------------------------------------------------------------------------
 
 def main():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 # === Criar Banco de Dados ===
 
@@ -543,4 +542,5 @@ def main():
 #                     === Execução do jogo completo ===
 # -----------------------------------------------------------------------------
 
-main()
+if __name__ == '__main__':
+    main()

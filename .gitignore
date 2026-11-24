@@ -12,3 +12,6 @@ venv/
 # Arquivos de configuração de editores
 .vscode/
 .idea/
+
+# Arquivo temporario que sera apagado
+implementações.txt
