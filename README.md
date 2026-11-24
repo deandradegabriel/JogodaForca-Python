@@ -1,6 +1,6 @@
-# Jogo da Forca em Python
+# 🎮 Jogo da Forca em Python
 
-Projeto desenvolvido em Python com o objetivo de praticar lógica de programação, aprimorar conhecimentos na linguagem e aplicar conceitos de organização de código, manipulação de dados e integração com banco de dados.
+Projeto desenvolvido em Python com o objetivo de praticar lógica de programação, aprimorar conhecimentos na linguagem e aplicar conceitos de organização de código, manipulação de dados, integração com banco de dados e testes automatizados.
 
 O jogo funciona de maneira semelhante ao tradicional jogo da forca, no qual o jogador deve descobrir uma palavra secreta digitando uma letra por vez. A cada tentativa incorreta, uma parte do corpo é adicionada à forca. Caso o corpo seja completado antes que a palavra seja descoberta, o jogador perde a partida.
 
@@ -16,23 +16,14 @@ Após a seleção, todas as mensagens apresentadas durante a partida são exibid
 Durante o jogo:
 
 1. O jogador recebe uma palavra secreta selecionada aleatoriamente do banco de dados.
-
 2. Uma letra deve ser informada por tentativa.
-
 3. O sistema verifica se a letra pertence à palavra.
-
 4. Letras corretas são reveladas na palavra.
-
 5. A cada tentativa incorreta, uma parte do corpo é adicionada à forca.
-
 6. Letras repetidas não são permitidas.
-
 7. O jogador vence quando descobre toda a palavra.
-
 8. O jogador perde quando todas as partes do corpo são adicionadas à forca.
-
 9. Ao final da partida, o jogador pode escolher continuar ou sair.
-
 
 ## ✨ Funcionalidades
 
@@ -53,20 +44,19 @@ Atualmente, o projeto possui:
 - Integração com banco de dados SQLite.
 - Seleção aleatória de palavras armazenadas no banco de dados.
 - Organização das palavras de acordo com o idioma selecionado.
-
+- Testes automatizados para verificar o comportamento das funções e a integração do jogo.
 
 ## 🗄️ Banco de Dados
 
 O projeto utiliza SQLite para armazenar e gerenciar as palavras utilizadas durante as partidas.
 
-A estrutura do banco de dados conta com uma tabela chamada palavras, composta pelas seguintes colunas:
+A estrutura do banco de dados conta com uma tabela chamada `palavras`, composta pelas seguintes colunas:
 
-Coluna  | Descrição
-:------ | :------
-id      | identificador único de palavra.
-palavra | palavra armazenada.
-idioma  | idioma ao qual a palavra pertence.
-
+| Coluna | Descrição |
+|:---|:---|
+| `id` | Identificador único da palavra. |
+| `palavra` | Palavra armazenada. |
+| `idioma` | Idioma ao qual a palavra pertence. |
 
 O sistema identifica o idioma selecionado pelo jogador e realiza uma consulta ao banco de dados para selecionar aleatoriamente uma palavra correspondente.
 
@@ -74,6 +64,82 @@ Além disso, a inicialização do programa verifica se já existem palavras cada
 
 Dessa maneira, o projeto deixa de depender exclusivamente de listas de palavras diretamente no código, permitindo uma organização mais adequada dos dados e facilitando futuras expansões.
 
+## 🧪 Testes Automatizados
+
+O projeto utiliza a biblioteca `unittest`, nativa do Python, para implementar testes automatizados.
+
+Os testes estão organizados em uma pasta independente (`tests/`) e contemplam:
+
+- **Testes unitários:** verificam o comportamento individual das funções, como normalização de acentos, validação de letras, montagem da palavra atual e condições de vitória e derrota.
+- **Testes de integração:** verificam o funcionamento conjunto de diferentes funções durante uma partida, incluindo cenários de vitória, derrota e repetição de letras.
+- **Simulação de entradas:** utilização de `unittest.mock` para simular entradas do jogador e controlar dependências durante os testes.
+- **Banco de dados isolado nos testes:** utilização de bancos temporários para verificar as operações relacionadas ao SQLite sem depender do banco de dados principal.
+
+Atualmente, o projeto conta com **44 testes automatizados**, todos aprovados.
+
+### Executando os testes
+
+Na pasta raiz do projeto, execute:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## 📁 Estrutura do Projeto
+
+```text
+jogo_da_forca/
+│
+├── data/
+│   └── jogo_da_forca.db
+│
+├── src/
+│   ├── __init__.py
+│   └── jogo_da_forca.py
+│
+├── tests/
+│   └── test_jogo_da_forca.py
+│
+├── .gitignore
+├── README.md
+└── ...
+```
+
+**Descrição dos diretórios:**
+
+- `data/`: armazena o banco de dados SQLite utilizado pelo jogo.
+- `src/`: contém o código-fonte e a implementação das funcionalidades.
+- `tests/`: contém os testes automatizados do projeto.
+- `.gitignore`: define os arquivos e diretórios que não devem ser versionados.
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+- Python instalado.
+- Git instalado (opcional, para clonar o repositório).
+
+### Clonando o repositório
+
+```bash
+git clone https://github.com/deandradegabriel/JogodaForca-Python.git
+```
+
+Entre na pasta do projeto:
+
+```bash
+cd JogodaForca-Python
+```
+
+### Executando o jogo
+
+Na pasta raiz do projeto, execute:
+
+```bash
+python src/jogo_da_forca.py
+```
+
+O programa inicializará o banco de dados quando necessário e apresentará a seleção de idioma.
 
 ## 🧠 Desenvolvimento e Aprendizados
 
@@ -83,44 +149,52 @@ Durante o desenvolvimento, o código passou por diversas melhorias estruturais e
 
 Entre os principais conceitos aplicados, destacam-se:
 
-**Organização e modularização**: divisão do programa em funções, tornando o código mais organizado, reutilizável e fácil de manter.
+**Organização e modularização:** divisão do programa em funções e organização do código-fonte em módulos, tornando o projeto mais organizado, reutilizável e fácil de manter.
 
-**Manipulação de strings**: utilização de métodos para validação e tratamento das entradas fornecidas pelo jogador.
+**Manipulação de strings:** utilização de métodos para validação e tratamento das entradas fornecidas pelo jogador.
 
-**Normalização de caracteres**: utilização da biblioteca unicodedata para permitir a comparação de letras com e sem acentos. Por exemplo, em uma palavra como coração, o jogador pode utilizar a para encontrar a letra ã.
+**Normalização de caracteres:** utilização da biblioteca `unicodedata` para permitir a comparação de letras com e sem acentos. Por exemplo, em uma palavra como `coração`, o jogador pode utilizar `a` para encontrar a letra `ã`.
 
-**Estruturas de dados**: utilização de listas e dicionários para armazenar informações, controlar as letras utilizadas e organizar as mensagens nos diferentes idiomas.
+**Estruturas de dados:** utilização de listas e dicionários para armazenar informações, controlar as letras utilizadas e organizar as mensagens nos diferentes idiomas.
 
-**Internacionalização**: implementação de um sistema que permite selecionar o idioma antes do início da partida.
+**Internacionalização:** implementação de um sistema que permite selecionar o idioma antes do início da partida.
 
-**Banco de dados**: utilização de SQLite para criar tabelas, inserir informações e realizar consultas SQL, permitindo selecionar palavras aleatoriamente de acordo com o idioma escolhido.
+**Banco de dados:** utilização de SQLite para criar tabelas, inserir informações e realizar consultas SQL, permitindo selecionar palavras aleatoriamente de acordo com o idioma escolhido.
+
+**Testes automatizados:** aplicação de testes unitários e de integração com `unittest`, além da utilização de mocks para simular entradas e dependências externas.
 
 Essas implementações contribuíram para ampliar meus conhecimentos em Python e proporcionar contato prático com conceitos importantes do desenvolvimento de software.
 
-
 ## 🚀 Próximas Atualizações
 
-O projeto continua em desenvolvimento e poderá receber novas funcionalidades e melhorias estruturais.
-
+O projeto continua em desenvolvimento e poderá receber novas funcionalidades e melhorias estruturais, com foco na organização do código, qualidade e evolução das funcionalidades existentes.
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### Linguagem
+
 - Python
 
 ### Banco de Dados
+
 - SQLite
 
-### Ferramentas
-- Git
-- GitHub
-
-### Bibliotecas utilizadas
+### Bibliotecas
 
 - `os`
 - `unicodedata`
 - `sqlite3`
+- `unittest`
+- `unittest.mock`
+- `tempfile`
+- `pathlib`
+- `io`
 
+### Ferramentas
+
+- Git
+- GitHub
+- Visual Studio Code
 
 ## 👨‍💻 Autor
 
