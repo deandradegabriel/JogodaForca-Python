@@ -1,8 +1,13 @@
 import os
-import random
 import unicodedata
+import sqlite3
+from pathlib import Path
 
-os.system('cls' if os.name == 'nt' else 'clear')
+DIRETORIO_PROJETO = Path(__file__).resolve().parent.parent
+DIRETORIO_DADOS = DIRETORIO_PROJETO / 'data'
+
+DIRETORIO_DADOS.mkdir(exist_ok=True)
+CAMINHO_BANCO = DIRETORIO_DADOS / 'jogo_da_forca.db'
 
 # === Dicionários Utilizados para guardar as palavras em Português e Inglês ===
  
@@ -54,7 +59,7 @@ mensagens = {
         [
             'Número de erros excedidos, o corpo na forca foi completado!\n'
             'VOCÊ PERDEU!!!',
-            'A palavra secreta era:'
+            'A palavra secreta era: '
 
         ],
 
@@ -124,7 +129,7 @@ mensagens = {
 
         'mensagens_perdeu' : 
         [
-            'Number of errors exceeded, the body in the gallows is complet!\n'
+            'Maximum number of errors exceeded,the gallows figure is complete!\n'
             'YOU LOST!!!',
             'The secret word was: '
         ],
@@ -153,23 +158,113 @@ mensagens = {
 }
 
 
-lista_palavras = [
-    'python',
-    'palavra',
-    'escolha',
-    'computador',
-    'trabalho',
-    'coração',
-    'árvore',
-    'programação',
-    'informação',
-    'função'
-]
-
 
 # -----------------------------------------------------------------------------
 #                      === Principais funções do Jogo ===
 # -----------------------------------------------------------------------------
+
+def Criar_Banco_Dados():
+    conexao = sqlite3.connect(CAMINHO_BANCO)
+    cursor = conexao.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS palavras (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        palavra TEXT NOT NULL,
+        idioma TEXT NOT NULL
+        )
+    ''')
+    
+    conexao.commit()
+    conexao.close()
+
+
+def Inserir_Dados_Tabela():
+    conexao = sqlite3.connect(CAMINHO_BANCO)
+    cursor = conexao.cursor()
+
+    palavras_pt = [
+        'python',
+        'palavra',
+        'escolha',
+        'computador',
+        'trabalho',
+        'coração',
+        'árvore',
+        'programação',
+        'informação',
+        'função']
+    palavras_en = [
+        'python',
+        'word',
+        'choice',
+        'computer',
+        'work',
+        'heart',
+        'tree',
+        'programming',
+        'information',
+        'function'
+    ]
+
+    comando_sql = ('''
+        SELECT COUNT(*)
+        FROM palavras
+        WHERE idioma = ?;
+
+    ''')
+
+    cursor.execute(comando_sql, ('pt',))
+    quantidade = cursor.fetchone()[0]
+
+    if quantidade == 0:
+        for palavra in palavras_pt:
+            cursor.execute(
+                'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
+                (palavra, 'pt')
+            )
+
+    cursor.execute(comando_sql, ('en',))
+    quantidade = cursor.fetchone()[0]
+
+    if quantidade == 0:
+        for palavra in palavras_en:
+            cursor.execute(
+                'INSERT INTO palavras (palavra, idioma) VALUES (?, ?)',
+                (palavra, 'en')
+            )
+    
+    conexao.commit()
+    conexao.close()
+
+
+def Buscar_Palavra_em_DB(idioma):
+    conexao = sqlite3.connect(CAMINHO_BANCO)
+    cursor = conexao.cursor()
+    
+    if idioma not in ('pt', 'en'):
+        conexao.close()
+        return None
+    
+    comando_sql = f'''
+        SELECT palavra 
+        FROM palavras
+        WHERE idioma = ?
+        ORDER BY RANDOM()
+        LIMIT 1
+    '''
+        
+    cursor.execute(comando_sql, (idioma, ))
+    
+    resultado = cursor.fetchone()
+
+    if resultado is None:
+        conexao.close()
+        return None
+
+    conexao.close()
+    return resultado[0]
+
 
 def Escolher_Idioma():
     while True:
@@ -326,7 +421,7 @@ def Jogar(idioma):
     Mensagem_Inicial(idioma)
     Mostrar_Regras(idioma)
 
-    palavra_da_vez = random.choice(lista_palavras)
+    palavra_da_vez = Buscar_Palavra_em_DB(idioma)
 
     letras_tentadas = []
     n_tentativas = 0
@@ -419,12 +514,19 @@ def Jogar(idioma):
 # -----------------------------------------------------------------------------
 
 def main():
-
-# === Executa o jogo ===
-
-    idioma = Escolher_Idioma()
     os.system('cls' if os.name == 'nt' else 'clear')
 
+# === Criar Banco de Dados ===
+
+    Criar_Banco_Dados()
+    Inserir_Dados_Tabela()
+
+
+# === Executa o jogo ===
+    
+    idioma = Escolher_Idioma()
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
     while True:
         Jogar(idioma)
 
@@ -440,4 +542,5 @@ def main():
 #                     === Execução do jogo completo ===
 # -----------------------------------------------------------------------------
 
-main()
+if __name__ == '__main__':
+    main()
